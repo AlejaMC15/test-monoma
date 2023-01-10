@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   AppBar,
   Card,
@@ -16,13 +16,31 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import ListItemContext from "../../context/ListItemContext";
+import Modal from "@mui/material/Modal";
 
 const Dashboard = () => {
 
-  const { listItemsp, listOfPokemons } = useContext(ListItemContext);
+  const { listOfPokemons } = useContext(ListItemContext);
 
-  console.log(listItemsp, listOfPokemons);
+  const [open, setOpen] = useState(false);
+  const [info, setInfo] = useState();
+  const handleOpen = (item: any) => {
+    item !== undefined && setInfo(item);
+    setOpen(true)
+  };
+  const handleClose = () => setOpen(false);
 
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
   return (
     <React.Fragment>
@@ -39,35 +57,44 @@ const Dashboard = () => {
         </Toolbar>
       </AppBar>
       <main>
-        {/* Hero unit */}
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            pt: 8,
-            pb: 6,
-          }}
-        >
-          <Container maxWidth="sm">
-            <Card sx={{ maxWidth: 345 }}>
-              <CardMedia
-                sx={{ height: 140 }}
-                image="https://source.unsplash.com/random"
-                title="green iguana"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Lizard
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Lizards are a widespread group of squamate reptiles, with over 6,000
-                  species, ranging across all continents except Antarctica
-                </Typography>
-              </CardContent>
-              <CardActions>
-              </CardActions>
-            </Card>
-          </Container>
-        </Box>
+
+        {
+          listOfPokemons?.map((item: any, index: any) => {
+            return (
+              <Box
+                sx={{
+                  bgcolor: "background.paper",
+                  pt: 8,
+                  pb: 6,
+                }}
+                key={index}
+              >
+                <Container maxWidth="sm">
+                  <Card sx={{ maxWidth: 345 }} onClick={() => handleOpen(item)}>
+                    <CardMedia
+                      sx={{ height: 140 }}
+                      image={item.sprites.other.dream_world.front_default}
+                      title="green iguana"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {item.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {item.moves.map((move: any, index: any) => {
+                          return (<h4 key={index}>{move.move.name}</h4>)
+                        })}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                    </CardActions>
+                  </Card>
+                </Container>
+              </Box>
+            )
+          })
+        }
+
         <Container sx={{ py: 8 }} maxWidth="md">
 
           <Grid container justifyContent="center">
@@ -77,7 +104,7 @@ const Dashboard = () => {
           </Grid>
         </Container>
       </main>
-      {/* Footer */}
+
       <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
           Footer
@@ -91,7 +118,24 @@ const Dashboard = () => {
           Something here to give the footer a purpose!
         </Typography>
       </Box>
-      {/* End footer */}
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} >
+          {/* <img src={info && info.sprites.other.dream_world.front_default} alt="pokemon" /> */}
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {/* {info?.name} */}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
+
     </React.Fragment>
   );
 };

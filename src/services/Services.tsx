@@ -8,10 +8,9 @@ export const Services: any = () => {
 
   const ListItems = async () => {
 
-    axios.get('https://pokeapi.co/api/v2/pokemon/?offset=10&limit=50')
+    axios.get('https://pokeapi.co/api/v2/pokemon/?offset=10&limit=10')
       .then(function (data: any) {
         // handle success
-        console.log(data);
         setListItemsp(data)
       })
       .catch(function (error: any) {
@@ -28,8 +27,7 @@ export const Services: any = () => {
       const requests = listItemsp !== undefined && listItemsp.data.results.map((item: any) => fetch(item.url));
       const responses = await Promise.all(requests);
       const dataApi: any = await Promise.all(responses?.map((resp) => resp.json()));
-      console.log(dataApi);
-      setListOfPokemons(dataApi);
+      return setListOfPokemons(dataApi);
     } catch (e) {
       console.log(e);
     }
