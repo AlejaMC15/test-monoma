@@ -19,23 +19,6 @@ const Register = () => {
   const [emailUser, setEmailUser] = useState("");
   const [passwordUser, setPasswordUser] = useState("");
 
-  /*  const handleAction = async () => {
-     try {
-       const response: any = await createUserWithEmailAndPassword(
-         auth,
-         emailUser,
-         passwordUser
-       );
-       sessionStorage.setItem(
-         "Auth Token",
-         response._tokenResponse.refreshToken
-       );
-       response.operationType === "signIn" && navigate("/")
-     } catch (err: any) {
-       console.log(JSON.stringify(err), err.firebase);
-     }
-   }; */
-
   const handleAction = async (e: any) => {
     e.preventDefault()
 
@@ -53,12 +36,7 @@ const Register = () => {
         console.log(errorCode, errorMessage);
         // ..
       });
-
-
   }
-
-  console.log(emailUser, 'setUserEml', passwordUser, 'setUserPass');
-
 
   return (
     <Container component="main" maxWidth="xs">
@@ -113,7 +91,7 @@ const Register = () => {
             Sign Up
           </Button>
           <Grid container justifyContent="flex-end">
-            <Grid item>
+            <Grid item onClick={() => navigate('/')}>
               <Link href="#" variant="body2">
                 Already have an account? Login
               </Link>

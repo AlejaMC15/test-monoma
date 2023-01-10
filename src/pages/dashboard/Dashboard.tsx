@@ -17,11 +17,12 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import ListItemContext from "../../context/ListItemContext";
 import Modal from "@mui/material/Modal";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
 
   const { listOfPokemons } = useContext(ListItemContext);
-
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [info, setInfo] = useState();
   const handleOpen = (item: any) => {
@@ -41,13 +42,15 @@ const Dashboard = () => {
     boxShadow: 24,
     p: 4,
   };
+  
+  const backLogin = () => navigate('/')
 
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <img style={{ width: "10%" }} src={require('../../assets/images/logo.png')} alt="" />
+          <img style={{ width: "10%" }} src={require('../../assets/images/logo.png')} alt="" onClick={backLogin} />
           <Typography variant="h4" color="inherit" noWrap>
             MONOMA
           </Typography>
@@ -57,44 +60,46 @@ const Dashboard = () => {
         </Toolbar>
       </AppBar>
       <main>
-
-        {
-          listOfPokemons?.map((item: any, index: any) => {
-            return (
-              <Box
-                sx={{
-                  bgcolor: "background.paper",
-                  pt: 8,
-                  pb: 6,
-                }}
-                key={index}
-              >
-                <Container maxWidth="sm">
-                  <Card sx={{ maxWidth: 345 }} onClick={() => handleOpen(item)}>
-                    <CardMedia
-                      sx={{ height: 140 }}
-                      image={item.sprites.other.dream_world.front_default}
-                      title="green iguana"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {item.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {item.moves.map((move: any, index: any) => {
-                          return (<h4 key={index}>{move.move.name}</h4>)
-                        })}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                    </CardActions>
-                  </Card>
-                </Container>
-              </Box>
-            )
-          })
-        }
-
+        <Grid container spacing={2}>
+          {
+            listOfPokemons?.map((item: any, index: any) => {
+              return (
+                <Grid item xs={12} sm={4} md={4} lg={3} >
+                  <Box
+                    sx={{
+                      bgcolor: "background.paper",
+                      pt: 8,
+                      pb: 6,
+                    }}
+                    key={index}
+                  >
+                    <Container maxWidth="sm">
+                      <Card sx={{ maxWidth: 345 }} onClick={() => handleOpen(item)}>
+                        <CardMedia
+                          sx={{ height: 140 }}
+                          image={item.sprites.other.dream_world.front_default}
+                          title="green iguana"
+                        />
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {item.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {item.moves.map((move: any, index: any) => {
+                              return (<h4 key={index}>{move.move.name}</h4>)
+                            })}
+                          </Typography>
+                        </CardContent>
+                        <CardActions>
+                        </CardActions>
+                      </Card>
+                    </Container>
+                  </Box>
+                </Grid>
+              )
+            })
+          }
+        </Grid>
         <Container sx={{ py: 8 }} maxWidth="md">
 
           <Grid container justifyContent="center">
