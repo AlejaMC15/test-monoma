@@ -3,15 +3,16 @@ import Login from "./pages/login/Login";
 import Register from "./pages/registerUser/RegisterUser";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { ListItemsProvider } from "./context/ListItemContext";
-import { UseList } from './hooks/useList'
+import { Services } from './services/Services'
 
 function App() {
-  const { listItems, listOfPokemons, getListItems } = UseList();
+  const { listItemsp, listOfPokemons } = Services();
 
   return (
-    <ListItemsProvider value={{ listItems, listOfPokemons, getListItems }}>
+    <ListItemsProvider value={{ listItemsp, listOfPokemons }}>
       <Routes>
         <Route path="/" element={<Login />}></Route>
+        <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
       </Routes>

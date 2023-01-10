@@ -19,9 +19,10 @@ import ListItemContext from "../../context/ListItemContext";
 
 const Dashboard = () => {
 
-  const { listItems, listOfPokemons, getListItems } = useContext(ListItemContext);
+  const { listItemsp, listOfPokemons } = useContext(ListItemContext);
 
-  console.log(listItems, listOfPokemons, getListItems);
+  console.log(listItemsp, listOfPokemons);
+
 
   return (
     <React.Fragment>

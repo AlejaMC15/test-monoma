@@ -1,12 +1,11 @@
 import React from "react";
 
 interface IContext {
-    listItems: any,
-    listOfPokemons: any,
-    getListItems: any
+    listItemsp: any,
+    listOfPokemons: any
 }
 
-const obj: IContext = { listItems: '', listOfPokemons: '', getListItems: '' }
+const obj: IContext = { listItemsp: '', listOfPokemons: '' }
 
 const ListItemsContext = React.createContext(obj);
 

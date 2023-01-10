@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
   TextField,
@@ -9,8 +9,33 @@ import {
   Button,
   Link,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebaseConf";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+
+  const handleAction = (e: any) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, userEmail, userPassword)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        navigate("/dashboard")
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage)
+      });
+
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -36,6 +61,7 @@ const Login = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(e: any) => setUserEmail(e.target.value)}
           />
           <TextField
             margin="normal"
@@ -46,12 +72,14 @@ const Login = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(e: any) => setUserPassword(e.target.value)}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            onClick={handleAction}
           >
             Sign In
           </Button>

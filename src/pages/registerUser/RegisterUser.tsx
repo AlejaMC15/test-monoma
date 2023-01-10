@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   CssBaseline,
@@ -7,11 +7,59 @@ import {
   Grid,
   Box,
   Typography,
-  Container,
+  Container
 } from "@mui/material";
-
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebaseConf";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
+
+  const [emailUser, setEmailUser] = useState("");
+  const [passwordUser, setPasswordUser] = useState("");
+
+  /*  const handleAction = async () => {
+     try {
+       const response: any = await createUserWithEmailAndPassword(
+         auth,
+         emailUser,
+         passwordUser
+       );
+       sessionStorage.setItem(
+         "Auth Token",
+         response._tokenResponse.refreshToken
+       );
+       response.operationType === "signIn" && navigate("/")
+     } catch (err: any) {
+       console.log(JSON.stringify(err), err.firebase);
+     }
+   }; */
+
+  const handleAction = async (e: any) => {
+    e.preventDefault()
+
+    await createUserWithEmailAndPassword(auth, emailUser, passwordUser)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        navigate("/")
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        // ..
+      });
+
+
+  }
+
+  console.log(emailUser, 'setUserEml', passwordUser, 'setUserPass');
+
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -38,21 +86,20 @@ const Register = () => {
               <TextField
                 required
                 fullWidth
-                id="email"
                 label="Email Address"
-                name="email"
                 autoComplete="email"
+                onChange={(e: any) => setEmailUser(e.target.value)}
               />
+
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                name="password"
                 label="Password"
                 type="password"
-                id="password"
                 autoComplete="new-password"
+                onChange={(e: any) => setPasswordUser(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -61,6 +108,7 @@ const Register = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            onClick={handleAction}
           >
             Sign Up
           </Button>

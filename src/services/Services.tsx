@@ -1,20 +1,50 @@
-export const ListItems: any = async () => {
-  try {
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon/?offset=10&limit=50");
-    const data = response.json();
-    return data;
-  } catch (e) {
-    console.log(e);
-  }
-};
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-export const ListUrl: any = async (listItems: any) => {
-  try {
-    const requests = listItems?.map((item: any) => fetch(item.url));
-    const responses = await Promise.all(requests);
-    const dataApi = await Promise.all(responses?.map((resp) => resp.json()));
-    return dataApi;
-  } catch (e) {
-    console.log(e);
+export const Services: any = () => {
+  const [listItemsp, setListItemsp] = useState();
+  const [listOfPokemons, setListOfPokemons] = useState();
+
+
+  const ListItems = async () => {
+
+    axios.get('https://pokeapi.co/api/v2/pokemon/?offset=10&limit=50')
+      .then(function (data: any) {
+        // handle success
+        console.log(data);
+        setListItemsp(data)
+      })
+      .catch(function (error: any) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  };
+
+  const ListUrl = async (listItemsp: any) => {
+    try {
+      const requests = listItemsp !== undefined && listItemsp.data.results.map((item: any) => fetch(item.url));
+      const responses = await Promise.all(requests);
+      const dataApi: any = await Promise.all(responses?.map((resp) => resp.json()));
+      console.log(dataApi);
+      setListOfPokemons(dataApi);
+    } catch (e) {
+      console.log(e);
+    }
   }
-};
+
+  useEffect(() => {
+    ListItems()
+  }, [])
+
+  useEffect(() => {
+    listItemsp !== undefined && ListUrl(listItemsp)
+  }, [listItemsp])
+
+  return {
+    listItemsp,
+    listOfPokemons
+  }
+}
