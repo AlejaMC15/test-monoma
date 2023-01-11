@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   AppBar,
   Card,
@@ -12,7 +12,9 @@ import {
   Typography,
   Container,
   Avatar,
-  Pagination
+  Pagination,
+  Menu,
+  MenuItem
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import ListItemContext from "../../context/ListItemContext";
@@ -21,15 +23,22 @@ import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
 
-  const { listOfPokemons } = useContext(ListItemContext);
+  const { listItemsp, listOfPokemons, GetListItems, GetListUrl } = useContext(ListItemContext);
+
   const navigate = useNavigate();
+
   const [open, setOpen] = useState(false);
-  const [info, setInfo] = useState();
-  const handleOpen = (item: any) => {
-    item !== undefined && setInfo(item);
-    setOpen(true)
-  };
+
+  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    GetListItems()
+  }, [])
+
+  useEffect(() => {
+    listItemsp !== undefined && GetListUrl(listItemsp)
+  }, [listItemsp])
 
   const style = {
     position: 'absolute' as 'absolute',
@@ -42,21 +51,43 @@ const Dashboard = () => {
     boxShadow: 24,
     p: 4,
   };
-  
-  const backLogin = () => navigate('/')
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <img style={{ width: "10%" }} src={require('../../assets/images/logo.png')} alt="" onClick={backLogin} />
+          <img style={{ width: "10%" }} src={require('../../assets/images/logo.png')} alt="" onClick={() => navigate('/')} />
           <Typography variant="h4" color="inherit" noWrap>
             MONOMA
           </Typography>
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Grid >
+            <Avatar onClick={()=>handleClick} sx={{ m: 1, bgcolor: "secondary.main" }} >
+              <LockOutlinedIcon  />
+            </Avatar>
+          </Grid>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={openMenu}
+            onClose={handleCloseMenu}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <main>
@@ -74,11 +105,12 @@ const Dashboard = () => {
                     key={index}
                   >
                     <Container maxWidth="sm">
-                      <Card sx={{ maxWidth: 345 }} onClick={() => handleOpen(item)}>
+                      <Card sx={{ maxWidth: 345 }} onClick={handleOpen}>
                         <CardMedia
-                          sx={{ height: 140 }}
+                          component="img"
+                          height="194"
                           image={item.sprites.other.dream_world.front_default}
-                          title="green iguana"
+                          alt="Paella dish"
                         />
                         <CardContent>
                           <Typography gutterBottom variant="h5" component="div">
@@ -120,7 +152,7 @@ const Dashboard = () => {
           color="text.secondary"
           component="p"
         >
-          Something here to give the footer a purpose!
+          By Alejandra Meneses Carmona
         </Typography>
       </Box>
 

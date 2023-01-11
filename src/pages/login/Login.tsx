@@ -8,11 +8,11 @@ import {
   CssBaseline,
   Button,
   Link,
+  Modal
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConf";
-import Modal from "@mui/material/Modal";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -119,6 +119,7 @@ const Login = () => {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Review the information entered or create an account
           </Typography>
+          <Button onClick={handleClose} >Aceptar</Button>
         </Box>
       </Modal>
     </Container>

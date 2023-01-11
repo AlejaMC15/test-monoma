@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const Services: any = () => {
   const [listItemsp, setListItemsp] = useState();
   const [listOfPokemons, setListOfPokemons] = useState();
 
 
-  const ListItems = async () => {
+  const GetListItems = async () => {
 
     axios.get('https://pokeapi.co/api/v2/pokemon/?offset=10&limit=10')
       .then(function (data: any) {
@@ -22,7 +22,7 @@ export const Services: any = () => {
       });
   };
 
-  const ListUrl = async (listItemsp: any) => {
+  const GetListUrl = async (listItemsp: any) => {
     try {
       const requests = listItemsp !== undefined && listItemsp.data.results.map((item: any) => fetch(item.url));
       const responses = await Promise.all(requests);
@@ -33,16 +33,10 @@ export const Services: any = () => {
     }
   }
 
-  useEffect(() => {
-    ListItems()
-  }, [])
-
-  useEffect(() => {
-    listItemsp !== undefined && ListUrl(listItemsp)
-  }, [listItemsp])
-
   return {
     listItemsp,
-    listOfPokemons
+    listOfPokemons,
+    GetListItems,
+    GetListUrl
   }
 }
