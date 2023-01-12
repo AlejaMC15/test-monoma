@@ -6,10 +6,10 @@ import { ListItemsProvider } from "./context/ListItemContext";
 import { Services } from './services/Services'
 
 function App() {
-  const { listItemsp, listOfPokemons, GetListItems, GetListUrl } = Services();
+  const { listItemsp, listOfPokemons, GetListItems, GetListUrl, load } = Services();
 
   return (
-    <ListItemsProvider value={{ listItemsp, listOfPokemons, GetListItems, GetListUrl }}>
+    <ListItemsProvider value={{ listItemsp, listOfPokemons, GetListItems, GetListUrl, load }}>
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/login" element={<Login />}></Route>

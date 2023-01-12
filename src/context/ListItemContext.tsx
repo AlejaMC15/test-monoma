@@ -4,10 +4,11 @@ interface IContext {
     listItemsp: any,
     listOfPokemons: any,
     GetListItems: any,
-    GetListUrl: any
+    GetListUrl: any,
+    load: boolean
 }
 
-const obj: IContext = { listItemsp: '', listOfPokemons: '', GetListItems: [], GetListUrl: [] };
+const obj: IContext = { listItemsp: '', listOfPokemons: '', GetListItems: [], GetListUrl: [], load: false };
 
 const ListItemsContext = React.createContext(obj);
 

@@ -14,22 +14,29 @@ import {
   Avatar,
   Pagination,
   Menu,
-  MenuItem
+  MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import ListItemContext from "../../context/ListItemContext";
 import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
 
+import './Dashboard.scss'
+
 const Dashboard = () => {
 
-  const { listItemsp, listOfPokemons, GetListItems, GetListUrl } = useContext(ListItemContext);
+  const { listItemsp, listOfPokemons, GetListItems, GetListUrl, load } = useContext(ListItemContext);
 
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
+  const [itemSelected, setItemSelected] = useState();
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (item: any) => {
+
+    setOpen(true)
+  };
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
@@ -71,8 +78,8 @@ const Dashboard = () => {
             MONOMA
           </Typography>
           <Grid >
-            <Avatar onClick={()=>handleClick} sx={{ m: 1, bgcolor: "secondary.main" }} >
-              <LockOutlinedIcon  />
+            <Avatar onClick={() => handleClick} sx={{ m: 1, bgcolor: "secondary.main" }} >
+              <LockOutlinedIcon />
             </Avatar>
           </Grid>
           <Menu
@@ -93,7 +100,7 @@ const Dashboard = () => {
       <main>
         <Grid container spacing={2}>
           {
-            listOfPokemons?.map((item: any, index: any) => {
+            !load ? listOfPokemons?.map((item: any, index: any) => {
               return (
                 <Grid item xs={12} sm={4} md={4} lg={3} >
                   <Box
@@ -105,20 +112,23 @@ const Dashboard = () => {
                     key={index}
                   >
                     <Container maxWidth="sm">
-                      <Card sx={{ maxWidth: 345 }} onClick={handleOpen}>
+                      <Card sx={{ maxWidth: 345 }} onClick={() => handleOpen(item)}>
                         <CardMedia
                           component="img"
                           height="194"
                           image={item.sprites.other.dream_world.front_default}
                           alt="Paella dish"
                         />
+                        <Grid className='ContainerbuttonWeight'>
+                          <Typography className='buttonWeight' variant="body2" color="text.secondary">{item.weight}</Typography>
+                        </Grid>
                         <CardContent>
                           <Typography gutterBottom variant="h5" component="div">
                             {item.name}
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
-                            {item.moves.map((move: any, index: any) => {
-                              return (<h4 key={index}>{move.move.name}</h4>)
+                            {item.moves.slice(0, 2).map((move: any) => {
+                              return move.move.name.replace('-', ' ')
                             })}
                           </Typography>
                         </CardContent>
@@ -130,7 +140,9 @@ const Dashboard = () => {
                 </Grid>
               )
             })
-          }
+              : <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+              </Box>}
         </Grid>
         <Container sx={{ py: 8 }} maxWidth="md">
 
