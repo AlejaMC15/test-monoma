@@ -23,6 +23,7 @@ import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
 
 import './Dashboard.scss'
+import { it } from "node:test";
 
 const Dashboard = () => {
 
@@ -31,13 +32,20 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
-  const [itemSelected, setItemSelected] = useState();
+  const [itemSelected, setItemSelected] = useState([]);
 
-  const handleOpen = (item: any) => {
-
+  const handleOpen = (id: any[]) => {
+    const itemSelect = listOfPokemons.filter((item: any) => item.id === id)
+    setItemSelected(itemSelect)
     setOpen(true)
   };
-  const handleClose = () => setOpen(false);
+
+  const handleClose = () => {
+    setOpen(false)
+  };
+
+  console.log(itemSelected);
+
 
   useEffect(() => {
     GetListItems()
@@ -91,9 +99,9 @@ const Dashboard = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            {/* <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem onClick={handleClose}>Logout</MenuItem> */}
           </Menu>
         </Toolbar>
       </AppBar>
@@ -102,17 +110,17 @@ const Dashboard = () => {
           {
             !load ? listOfPokemons?.map((item: any, index: any) => {
               return (
-                <Grid item xs={12} sm={4} md={4} lg={3} >
+                <Grid item xs={12} sm={4} md={4} lg={3} key={index}>
                   <Box
                     sx={{
                       bgcolor: "background.paper",
                       pt: 8,
                       pb: 6,
                     }}
-                    key={index}
+
                   >
                     <Container maxWidth="sm">
-                      <Card sx={{ maxWidth: 345 }} onClick={() => handleOpen(item)}>
+                      <Card sx={{ maxWidth: 345 }} onClick={() => handleOpen(item.id)}>
                         <CardMedia
                           component="img"
                           height="194"
@@ -175,12 +183,12 @@ const Dashboard = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} >
-          {/* <img src={info && info.sprites.other.dream_world.front_default} alt="pokemon" /> */}
+          <img src={itemSelected !== undefined && itemSelected[0]?.sprites?.other?.dream_world.front_default} alt="pokemon" />
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            {/* {info?.name} */}
+            {itemSelected?.name}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            Habilities: {itemSelected?.abilities?.map((itm: any) => { return ability.name })}
           </Typography>
         </Box>
       </Modal>
